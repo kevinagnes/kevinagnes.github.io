@@ -19,8 +19,8 @@ async function LoadModelAttachToAnchorIndex(mindarThree, fileLocation,index){
     // Loading GLTF
     const gltf = await loadGLTF(fileLocation);
     gltf.scene.scale.set(0.1,0.1,0.1);
-    gltf.scene.rotation.set(Math.PI/2,0,0);
-    gltf.scene.position.set(0,-0.4,0);
+    gltf.scene.rotation.set(0,0,0);
+    gltf.scene.position.set(0,-0.5,0);
     // Adding gltf1 to marker index 0 group
     anchor.group.add(gltf.scene);
 }
