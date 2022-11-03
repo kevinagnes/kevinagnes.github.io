@@ -1,28 +1,29 @@
 const THREE = window.MINDAR.IMAGE.THREE;
 import {mockWithVideo, mockWithImage} from './libs/camera-mock.js';
 import {loadGLTF} from "./libs/loader.js";
-import { Vector3 } from './libs/three.js-r132/build/three.module.js';
+import { Vector3, } from './libs/three.js-r132/build/three.module.js';
+import { RGBELoader } from './libs/three.js-r132/examples/jsm/loaders/RGBELoader.js';
 console.log(THREE);
 
 let anchors = [];
 const models = [
-    ["./static/models/chair/scene.gltf", "Chair"],
-    ["./static/models/musicband-raccoon/scene.gltf", "Raccoon"],
-    ["./static/models/softmind/scene.gltf", "SoftMind"],
-    ["./static/models/earring/scene.gltf", "Earring"],
-    ["./static/models/robot/RobotExpressive.glb", "Robot"],
-    ["./static/models/hat1/scene.gltf", "Hat"],
-    ["./static/models/musicband-bear/scene.gltf", "Bear"]
+    ["./static/models/ExpoAR_Scenes/Guerra/Guerra.gltf", "Guerra"],
+    ["./static/models/ExpoAR_Scenes/Adoracao/Adoracao.gltf", "Adoracao"],
+    ["./static/models/ExpoAR_Scenes/Boqueirao/Boqueirao.gltf", "Boqueirao"],
+    ["./static/models/ExpoAR_Scenes/Veado/Veado.gltf", "Veado"],
+    ["./static/models/ExpoAR_Scenes/Beijo/Beijo.gltf", "Beijo"],
+    ["./static/models/ExpoAR_Scenes/Acrobatas/Acrobatas.gltf", "Acrobatas"],
+    ["./static/models/ExpoAR_Scenes/CacadaOnca/CacadaOnca.gltf", "CacadaOnca"]
 ]; 
 const transforms = [
     // scale, rotation, position
-    [new Vector3(0.30,0.30,0.30),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.15,0.15,0.15),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.01,0.01,0.01),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.40,0.40,0.40),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.40,0.40,0.40),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.10,0.10,0.10),new Vector3(0,0,0),new Vector3(0,0,0)],
-    [new Vector3(0.15,0.15,0.15),new Vector3(0,0,0),new Vector3(0,0,0)]
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)],
+    [new Vector3(1,1,1),new Vector3(0,0,0),new Vector3(0,0,0)]
 ]
 
 
@@ -53,13 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const mindarThree = new window.MINDAR.IMAGE.MindARThree({
             container: document.body,
-            imageTargetSrc: './targets.mind'
+            imageTargetSrc: './targets.mind',
+            uiScanning: "no",
+            uiLoading: "no"
         });
 
         const {renderer,scene,camera} = mindarThree;
 
-        const light = new THREE.HemisphereLight(0xffffff,0xbbbbff,1);
-        scene.add(light);
+        // const light = new THREE.HemisphereLight(0xffffff,0xbbbbff,1);
+        // scene.add(light);
+
+        AddLight(scene);
 
         for (let i=0;i<7;i++) {
             await LoadModelAttachToAnchorIndex(mindarThree, transforms[i], models[i],i);
@@ -73,3 +78,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     start();
 });
+
+function AddLight(scene){
+    new RGBELoader()
+    .setPath('./static/hdri/')
+    .load('01.hdr', function ( texture ) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        let skyboxMat = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.BackSide,
+        fog: false,
+        depthWrite: false,
+        });
+        //scene.background = texture;
+        scene.environment = texture;
+    }); 
+}
