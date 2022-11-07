@@ -50,7 +50,7 @@ async function LoadModelAttachToAnchorIndex(mindarThree, transform, model, index
 document.addEventListener("DOMContentLoaded", () => {
     const start = async () => {
         //mockWithImage();
-        mockWithVideo("./static/mov/test.mp4");
+        //mockWithVideo("./static/mov/test.mp4");
 
         const mindarThree = new window.MINDAR.IMAGE.MindARThree({
             container: document.body,
